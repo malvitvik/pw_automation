@@ -15,10 +15,13 @@ export class CheckoutPage {
         this.orderConfirmationMessage = page.getByText('Thank you');
     }
     
-    async placeOrder(country: string) {
+    async placeOrder(country: string, termsAndConditions:boolean=true) {
         await this.countryDropDown.selectOption(country);
-        await this.termsAndConditionsCheckbox.check();
+        await this.termsAndConditionsCheckbox.setChecked(termsAndConditions);
         await this.placeOrderButton.click();
+    }
+    
+    async verifyPlacedOrder() {
         await expect(this.orderConfirmationMessage).toBeVisible();
         await expect.soft(this.orderConfirmationMessage).toContainText('success');
 

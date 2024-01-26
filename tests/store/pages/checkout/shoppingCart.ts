@@ -38,6 +38,25 @@ export class ShoppingCart {
             await expect.soft(prices.last()).toHaveText('' + total);
         }
     }
+    
+    async verifyOrderSummary() {
+        let text = await this.orderSummary.textContent();
+        let items = text.replace(/[^0-9]+/g, ' ').trim().split(' ').map(it => +it);
+
+        expect(items).toContain(await this.cartItems.count());
+
+        //item and total prices
+        let allPrices = await this.cartItems.locator('.amount').allTextContents();
+        let total = 0;
+        
+        for (let i = 1; i < allPrices.length; i += 2) {
+            total += +allPrices[i];
+        }
+        
+        expect(items).toContain(total);
+        expect(items).toContain(0);
+        
+    }
 
     async applyCoupon(coupon:string) {
         await this.promoField.fill(coupon);

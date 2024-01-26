@@ -31,9 +31,11 @@ test.describe('Checkout flow', async () => {
         
         await header.openShoppingCart();
         await shoppingCart.verifyProducts(products);
+        await shoppingCart.verifyOrderSummary();
         await shoppingCart.applyCoupon(coupon);
         await shoppingCart.verifyCouponApplied(coupon);
         await shoppingCart.proceedToCheckout();
         await checkoutPage.placeOrder(country);
+        await checkoutPage.verifyPlacedOrder();
     });
 });
