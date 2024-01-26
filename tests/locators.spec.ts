@@ -89,7 +89,7 @@ test.describe('Locators examples', async () => {
         await page.hover('#mousehover');
         await page.click(".mouse-hover-content a[href='#top']");
         
-        await expect(page).toHaveURL(new RegExp('.*#top$'));
+        await expect(page).toHaveURL(/.*#top$/g);
     });
 
     test('iFrame Example', async ({page}) => {
