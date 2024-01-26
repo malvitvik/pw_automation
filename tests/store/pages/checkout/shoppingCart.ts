@@ -7,6 +7,7 @@ export class ShoppingCart {
     protected readonly promoField: Locator;
     protected readonly promoMessage: Locator;
     protected readonly applyPromoButton: Locator;
+    protected readonly orderSummary: Locator;
     protected readonly proceedToCheckoutButton: Locator;
     
     constructor(page: Page) {
@@ -15,6 +16,7 @@ export class ShoppingCart {
         this.promoField = page.locator('.promoCode');
         this.promoMessage = page.locator('.promoInfo');
         this.applyPromoButton = page.locator('.promoBtn');
+        this.orderSummary = page.locator('.products table ~ div');
         this.proceedToCheckoutButton = page.getByRole('button').last();
     }
     
@@ -69,8 +71,20 @@ export class ShoppingCart {
         await expect.soft(this.promoMessage).toHaveText('Code applied ..!');
         await expect.soft(this.promoMessage).toHaveCSS('color', 'rgb(0, 128, 0)');
     }
+    
+    async verifyCouponError(coupon:string='') {
+        await this.applyPromoButton.locator('.promo-btn-loader').waitFor({ state: 'detached' });
+        
+        let errorMessage = coupon == '' ? 'Empty code ..!' : 'Invalid code ..!';
+        
+        await expect.soft(this.promoField).toHaveValue(coupon);
+        await expect.soft(this.promoMessage).toHaveText(errorMessage);
+        await expect.soft(this.promoMessage).toHaveCSS('color', 'rgb(255, 0, 0)');
+        
+    }
 
     async proceedToCheckout() {
+        await this.cartItems.first().waitFor({ state: 'visible' });
         await this.proceedToCheckoutButton.click();
     }
 }

@@ -38,4 +38,33 @@ test.describe('Checkout flow', async () => {
         await checkoutPage.placeOrder(country);
         await checkoutPage.verifyPlacedOrder();
     });
+    
+    test('Empty coupon code', async () => {
+        await productGrid.addProductToCart([new Product('Beetroot')]);
+
+        await header.openShoppingCart();
+        await shoppingCart.applyCoupon('');
+        await shoppingCart.verifyCouponError();
+    });
+
+    test('Invalid coupon code', async () => {
+        let coupon = 'sadf';
+
+        await productGrid.addProductToCart([new Product('Beetroot')]);
+
+        await header.openShoppingCart();
+        await shoppingCart.applyCoupon(coupon);
+        await shoppingCart.verifyCouponError(coupon);
+    });
+
+    test('Order error', async () => {
+        const country = 'United Kingdom';
+
+        await productGrid.addProductToCart([new Product('Beetroot')]);
+
+        await header.openShoppingCart();
+        await shoppingCart.proceedToCheckout();
+        await checkoutPage.placeOrder(country, false);
+        await checkoutPage.verifyOrderError();
+    });
 });

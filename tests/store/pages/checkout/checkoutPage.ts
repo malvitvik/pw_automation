@@ -4,6 +4,7 @@ export class CheckoutPage {
     protected readonly page: Page;
     protected readonly countryDropDown: Locator;
     protected readonly termsAndConditionsCheckbox: Locator;
+    protected readonly errorMessage: Locator;
     protected readonly placeOrderButton: Locator;
     protected readonly orderConfirmationMessage: Locator;
     
@@ -11,6 +12,7 @@ export class CheckoutPage {
         this.page = page;
         this.countryDropDown = page.getByRole('combobox');
         this.termsAndConditionsCheckbox = page.getByRole('checkbox');
+        this.errorMessage = page.locator('.errorAlert');
         this.placeOrderButton = page.getByRole('button');
         this.orderConfirmationMessage = page.getByText('Thank you');
     }
@@ -28,5 +30,10 @@ export class CheckoutPage {
         let url = this.page.url();
         await expect(this.orderConfirmationMessage).toBeHidden();
         await expect.soft(this.page).not.toHaveURL(url); //page is redirected
+    }
+    
+    async verifyOrderError() {
+        await expect.soft(this.errorMessage).toHaveText('Please accept Terms & Conditions - Required');
+        await expect.soft(this.errorMessage).toHaveCSS('color', 'rgb(255, 0, 0)');
     }
 }
