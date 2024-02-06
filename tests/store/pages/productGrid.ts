@@ -27,7 +27,10 @@ export  class ProductGrid {
         expect(await this.productTiles.all()).toHaveLength(0);
     }
     
-    async addProductToCart(items: Array<Product>) {
+    async addProductToCart(items: Product[]|string) {
+       if (typeof items === "string")
+           items = [new Product(items)];
+        
         for (let product of items) {
             let tile = this.productTiles.filter({ hasText: product.name });
             let addToCartButton = tile.getByRole('button');

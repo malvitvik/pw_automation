@@ -40,7 +40,7 @@ test.describe('Checkout flow', async () => {
     });
     
     test('Empty coupon code', async () => {
-        await productGrid.addProductToCart([new Product('Beetroot')]);
+        await productGrid.addProductToCart('Beetroot');
 
         await header.openShoppingCart();
         await shoppingCart.applyCoupon('');
@@ -50,7 +50,7 @@ test.describe('Checkout flow', async () => {
     test('Invalid coupon code', async () => {
         let coupon = 'sadf';
 
-        await productGrid.addProductToCart([new Product('Beetroot')]);
+        await productGrid.addProductToCart('Beetroot');
 
         await header.openShoppingCart();
         await shoppingCart.applyCoupon(coupon);
@@ -60,7 +60,7 @@ test.describe('Checkout flow', async () => {
     test('Order error', async () => {
         const country = 'United Kingdom';
 
-        await productGrid.addProductToCart([new Product('Beetroot')]);
+        await productGrid.addProductToCart('Beetroot');
 
         await header.openShoppingCart();
         await shoppingCart.proceedToCheckout();
