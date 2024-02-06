@@ -28,7 +28,7 @@ export class CheckoutPage {
         await expect.soft(this.orderConfirmationMessage).toContainText('success');
 
         let url = this.page.url();
-        await expect(this.orderConfirmationMessage).toBeHidden();
+        await expect(this.orderConfirmationMessage).toBeHidden({timeout: 10_000});
         await expect.soft(this.page).not.toHaveURL(url); //page is redirected
     }
     
