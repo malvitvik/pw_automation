@@ -12,6 +12,17 @@ export class ProductListingPage {
     async verifyOpened() {
         let tile = this.productTiles.first();
         await expect(tile).toBeVisible();
-        console.log(await tile.locator('h5').textContent());
+    }
+    
+    async addProductToCart(product:string|number) {
+        
+        let tile = typeof product === "string" ?
+            this.productTiles.filter({ hasText: product }) : 
+            this.productTiles.nth(product);
+        
+        let productName = await tile.locator('h5').textContent();
+        await tile.getByRole('button', {name: 'Add To Cart'}).click();
+        console.log(productName);
+        return productName;
     }
 }
