@@ -17,7 +17,7 @@ test.describe('Checkout flow', async () => {
         shoppingCart = new ShoppingCart(page);
         checkoutPage = new CheckoutPage(page);
 
-        await page.goto('https://rahulshettyacademy.com/seleniumPractise/#/');
+        await page.goto('/seleniumPractise/#/');
     });
     
     test('E2E test: Place order', async () => {

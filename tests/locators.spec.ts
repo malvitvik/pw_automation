@@ -3,7 +3,7 @@ import {test, expect} from '@playwright/test';
 test.describe('Locators examples', async () => {
     
     test.beforeEach(async ({page}) => {
-        await page.goto('https://rahulshettyacademy.com/AutomationPractice/');
+        await page.goto('AutomationPractice/');
     });
     
     test('Radio Button Example', async ({page}) => {

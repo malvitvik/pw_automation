@@ -10,7 +10,7 @@ test.describe('Product search tests', async () => {
         header = new Header(page);
         productGrid = new ProductGrid(page);
         
-        await page.goto('https://rahulshettyacademy.com/seleniumPractise/#/');
+        await page.goto('/seleniumPractise/#/');
     });
     
     const products = ['Brocolli', 'Beetroot', 'Pumpkin'];

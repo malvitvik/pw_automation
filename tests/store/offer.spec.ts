@@ -11,7 +11,7 @@ test.describe('Offers', async () => {
     test.beforeEach(async ({ page }) => {
         offersPage = new OffersPage(page);
         
-        await page.goto('https://rahulshettyacademy.com/seleniumPractise/#/offers'); 
+        await page.goto('/seleniumPractise/#/offers'); 
     });
 
     const products = ['Carrot', 'Potato', 'Tomato'];
