@@ -1,4 +1,4 @@
-import {test, expect} from '@playwright/test';
+import {test} from '@playwright/test';
 import {Header} from "./pages/header/header";
 import {ProductGrid} from "./pages/productGrid";
 
