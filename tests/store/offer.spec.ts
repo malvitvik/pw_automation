@@ -1,7 +1,7 @@
 import {test} from '@playwright/test';
 import {OffersPage} from "./pages/offers/offersPage";
 import {Columns} from "./models/columns";
-import {getKeys} from "./models/helper";
+import {getKeys} from "./utils/helper";
 import {SortingOrder} from "./models/sortingOrder";
 
 test.describe('Offers', async () => {

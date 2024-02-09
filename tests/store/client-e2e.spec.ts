@@ -5,7 +5,7 @@ import {ProductListingPage} from "./pages/client/productListingPage";
 import {Header} from "./pages/client/header";
 import {ShoppingCart} from "./pages/client/shoppingCart";
 import {CheckoutPage} from "./pages/client/checkoutPage";
-import {randomInt} from "./models/helper";
+import {randomInt} from "./utils/helper";
 import {Product} from "./models/product";
 import {CreditCard} from "./models/creditCard";
 import {OrderSummary} from "./pages/client/orderSummary";

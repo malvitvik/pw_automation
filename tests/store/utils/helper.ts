@@ -1,4 +1,4 @@
-import {Columns} from "./columns";
+import {Columns} from "../models/columns";
 
 export function getKeys(obj: {} ) {
     return Object.keys(obj).filter((v) => !isNaN(Number(v)));
