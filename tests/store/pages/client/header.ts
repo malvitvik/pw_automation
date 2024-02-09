@@ -4,14 +4,20 @@ import {Locator, Page} from "@playwright/test";
 export class Header {
     protected readonly page: Page;
     //shopping cart
-    protected readonly cartIcon: Locator;
+    protected readonly ctaCart: Locator;
+    protected readonly ctaOrderHistory: Locator;
     
     constructor(page: Page) {
         this.page = page;
-        this.cartIcon = page.getByRole('button', { name: ' Cart' });
+        this.ctaCart = page.getByRole('button', { name: ' Cart' });
+        this.ctaOrderHistory = page.getByRole('button', { name: '  ORDERS' });
     }
     
     async openShoppingCart() {
-        await this.cartIcon.click();
+        await this.ctaCart.click();
+    }
+    
+    async openOrderHistory() {
+        await this.ctaOrderHistory.click();
     }
 }

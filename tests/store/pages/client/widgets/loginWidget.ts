@@ -16,9 +16,9 @@ export class LoginWidget {
         this.ctaSignIn = page.locator('#login');
     }
     
-    async login(user:{username:string, password:string}) {
-        await this.edtUsername.fill(user.username);
-        await this.edtPassword.fill(user.password);
+    async login(user:{userEmail:string, userPassword:string}) {
+        await this.edtUsername.fill(user.userEmail);
+        await this.edtPassword.fill(user.userPassword);
         await this.ctaSignIn.click();
     }
     

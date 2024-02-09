@@ -12,7 +12,7 @@ import {OrderSummary} from "./pages/client/orderSummary";
 import {OrderHistory} from "./pages/client/orderHistory";
 import {OrderDetails} from "./pages/client/orderDetails";
 
-test.describe('Client tests', async () => {
+test.describe('Client E2E tests', async () => {
     
     let header: Header;
     let registrationPage: RegistrationPage;
@@ -23,6 +23,10 @@ test.describe('Client tests', async () => {
     let orderSummary: OrderSummary;
     let orderHistory: OrderHistory;
     let orderDetails: OrderDetails;
+
+    const creditCard = new CreditCard('Test', '4111 1111 1111 1111', '05/2025', '000');
+    const country = 'India';
+    const coupon = 'rahulshettyacademy';
     
     test.beforeEach(async ({page}) => {
         header = new Header(page);
@@ -38,22 +42,18 @@ test.describe('Client tests', async () => {
         await page.goto('/client/');
     });
 
-    test('E2E test - registered user', async() => {
+    test('E2E test - register user and place order', async() => {
         const no = ('000' + randomInt(1_000)).slice(-3);
         // const no = 549;
         const user = {firstName: `firstName${no}`, lastName: `lastName${no}`, gender: 'Male',
             email: `user_${no}@email.com`, phoneNumber:'3333333333', password:'Qwerty123', occupation: 'Doctor'};
-        const creditCard = new CreditCard('Test', '4111 1111 1111 1111', '05/2025', '000');
-        const country = 'India';
-        const coupon = 'rahulshettyacademy';
-        
         
         await loginPage.openRegistration();
         await registrationPage.registerUser(user);
         await registrationPage.verifyRegistered();
         await registrationPage.openLoginPage();
 
-        await loginPage.login({username: user.email, password:user.password});
+        await loginPage.login({userEmail: user.email, userPassword:user.password});
         
         await plp.verifyOpened();
         const products = [new Product(await plp.addProductToCart(1))];

@@ -12,7 +12,7 @@ export class LoginPage {
         this.ctaRegister = page.locator("a[href$='/register']");
     }
     
-    async login(user:{username:string, password:string}) {
+    async login(user:{userEmail:string, userPassword:string}) {
         await this.loginWidget.login(user);
     }
     
