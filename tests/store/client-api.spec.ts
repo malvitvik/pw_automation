@@ -1,24 +1,28 @@
-import {test, request, expect} from '@playwright/test';
-import {ProductListingPage} from "./pages/client/productListingPage";
-import {ShoppingCart} from "./pages/client/shoppingCart";
-import {CheckoutPage} from "./pages/client/checkoutPage";
-import {OrderSummary} from "./pages/client/orderSummary";
-import {OrderHistory} from "./pages/client/orderHistory";
-import {OrderDetails} from "./pages/client/orderDetails";
+import {request, test as base} from '@playwright/test';
 import {Product} from "./models/product";
 import {CreditCard} from "./models/creditCard";
-import {Header} from "./pages/client/header";
 import {ApiUtils} from "./utils/api-utils";
+import {headerFixtures, HeaderFixtures} from "./fixtures/client/header.fixtures";
+import {productListingPageFixtures, ProductListingPageFixtures} from "./fixtures/client/productListingPage.fixtures";
+import {shoppingCartPageFixtures, ShoppingCartPageFixtures} from "./fixtures/client/shoppingCart.fixtures";
+import {checkoutFixtures, CheckoutFixtures} from "./fixtures/client/checkout.fixtures";
+import {orderSummaryFixtures, OrderSummaryFixtures} from "./fixtures/client/orderSummary.fixtures";
+import {orderHistoryFixtures, OrderHistoryFixtures} from "./fixtures/client/orderHistory.fixtures";
+import {orderDetailsFixtures, OrderDetailsFixtures} from "./fixtures/client/orderDetails.fixtures";
+
+const test = base.extend<HeaderFixtures &
+    ProductListingPageFixtures & ShoppingCartPageFixtures & CheckoutFixtures &
+    OrderSummaryFixtures & OrderHistoryFixtures & OrderDetailsFixtures>({
+    ...headerFixtures,
+    ...productListingPageFixtures,
+    ...shoppingCartPageFixtures,
+    ...checkoutFixtures,
+    ...orderSummaryFixtures,
+    ...orderHistoryFixtures,
+    ...orderDetailsFixtures
+});
 
 test.describe('Client API tests', async () => {
-
-    let header: Header;
-    let plp: ProductListingPage;
-    let cart: ShoppingCart;
-    let checkout: CheckoutPage;
-    let orderSummary: OrderSummary;
-    let orderHistory: OrderHistory;
-    let orderDetails: OrderDetails;
     
     let apiUtils : ApiUtils;
     
@@ -39,14 +43,6 @@ test.describe('Client API tests', async () => {
     });
     
     test.beforeEach(async ({ page}) => {
-        header = new Header(page);
-        plp = new ProductListingPage(page);
-        cart = new ShoppingCart(page);
-        checkout = new CheckoutPage(page);
-        orderSummary = new OrderSummary(page);
-        orderHistory = new OrderHistory(page);
-        orderDetails = new OrderDetails(page);
-        
         await page.addInitScript(value => 
             window.localStorage.setItem('token', value),
             apiResponse.token);
@@ -54,7 +50,8 @@ test.describe('Client API tests', async () => {
         await page.goto('/client/');
     });
     
-    test('UI - Place order with registered user', async () => {
+    test('UI - Place order with registered user', async ({ header, plp, cart, checkout,
+                                                             orderSummary, orderHistory, orderDetails }) => {
         const products = [new Product(await plp.addProductToCart(1))];
 
         await header.openShoppingCart();
@@ -76,7 +73,7 @@ test.describe('Client API tests', async () => {
         await orderDetails.verifyOrder(orderNumber);
     });
     
-    test('API - Place order with registered user', async () => {
+    test('API - Place order with registered user', async ({ header, orderHistory, orderDetails }) => {
         await header.openOrderHistory();
         await orderHistory.openOrder(apiResponse.orderNumber);
         await orderDetails.verifyOrder(apiResponse.orderNumber);

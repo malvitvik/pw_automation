@@ -1,48 +1,44 @@
-import {test} from '@playwright/test';
-import {LoginPage} from "./pages/client/loginPage";
-import {RegistrationPage} from "./pages/client/registrationPage";
-import {ProductListingPage} from "./pages/client/productListingPage";
-import {Header} from "./pages/client/header";
-import {ShoppingCart} from "./pages/client/shoppingCart";
-import {CheckoutPage} from "./pages/client/checkoutPage";
+import {test as base} from '@playwright/test';
 import {randomInt} from "./utils/helper";
 import {Product} from "./models/product";
 import {CreditCard} from "./models/creditCard";
-import {OrderSummary} from "./pages/client/orderSummary";
-import {OrderHistory} from "./pages/client/orderHistory";
-import {OrderDetails} from "./pages/client/orderDetails";
+import {HeaderFixtures, headerFixtures} from "./fixtures/client/header.fixtures";
+import {registrationPageFixtures, RegistrationPageFixtures} from "./fixtures/client/registrationPage.fixtures";
+import {loginPageFixtures, LoginPageFixtures} from "./fixtures/client/loginPage.fixtures";
+import {productListingPageFixtures, ProductListingPageFixtures} from "./fixtures/client/productListingPage.fixtures";
+import {shoppingCartPageFixtures, ShoppingCartPageFixtures} from "./fixtures/client/shoppingCart.fixtures";
+import {orderSummaryFixtures, OrderSummaryFixtures} from "./fixtures/client/orderSummary.fixtures";
+import {checkoutFixtures, CheckoutFixtures} from "./fixtures/client/checkout.fixtures";
+import {orderHistoryFixtures, OrderHistoryFixtures} from "./fixtures/client/orderHistory.fixtures";
+import {orderDetailsFixtures, OrderDetailsFixtures} from "./fixtures/client/orderDetails.fixtures";
+
+const test = base.extend<HeaderFixtures & RegistrationPageFixtures & LoginPageFixtures &
+    ProductListingPageFixtures & ShoppingCartPageFixtures & CheckoutFixtures & 
+    OrderSummaryFixtures & OrderHistoryFixtures & OrderDetailsFixtures>({
+    ...headerFixtures,
+    ...registrationPageFixtures,
+    ...loginPageFixtures,
+    ...productListingPageFixtures,
+    ...shoppingCartPageFixtures,
+    ...checkoutFixtures,
+    ...orderSummaryFixtures,
+    ...orderHistoryFixtures,
+    ...orderDetailsFixtures
+});
 
 test.describe('Client E2E tests', async () => {
-    
-    let header: Header;
-    let registrationPage: RegistrationPage;
-    let loginPage: LoginPage;
-    let plp: ProductListingPage;
-    let cart: ShoppingCart;
-    let checkout: CheckoutPage;
-    let orderSummary: OrderSummary;
-    let orderHistory: OrderHistory;
-    let orderDetails: OrderDetails;
 
     const creditCard = new CreditCard('Test', '4111 1111 1111 1111', '05/2025', '000');
     const country = 'India';
     const coupon = 'rahulshettyacademy';
     
     test.beforeEach(async ({page}) => {
-        header = new Header(page);
-        registrationPage = new RegistrationPage(page);
-        loginPage = new LoginPage(page);
-        plp = new ProductListingPage(page);
-        cart = new ShoppingCart(page);
-        checkout = new CheckoutPage(page);
-        orderSummary = new OrderSummary(page);
-        orderHistory = new OrderHistory(page);
-        orderDetails = new OrderDetails(page);
-        
         await page.goto('/client/');
     });
 
-    test('E2E test - register user and place order', async() => {
+    test('E2E test - register user and place order', async({ header, loginPage, registrationPage, 
+                                                               plp, cart, checkout,
+                                                               orderSummary, orderHistory, orderDetails}) => {
         const no = ('000' + randomInt(1_000)).slice(-3);
         // const no = 549;
         const user = {firstName: `firstName${no}`, lastName: `lastName${no}`, gender: 'Male',

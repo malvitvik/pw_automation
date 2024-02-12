@@ -1,23 +1,26 @@
-import {test} from '@playwright/test';
-import {OffersPage} from "./pages/offers/offersPage";
+import {test as base} from '@playwright/test';
 import {Columns} from "./models/columns";
 import {getKeys} from "./utils/helper";
 import {SortingOrder} from "./models/sortingOrder";
+import {
+    OffersPageFixtures,
+    offersPageFixtures
+} from "./fixtures/offers/offersPage.fixtures";
+
+const test = base.extend<OffersPageFixtures>({
+    ...offersPageFixtures
+});
 
 test.describe('Offers', async () => {
     
-    let offersPage: OffersPage;
-    
     test.beforeEach(async ({ page }) => {
-        offersPage = new OffersPage(page);
-        
         await page.goto('/seleniumPractise/#/offers'); 
     });
 
     const products = ['Carrot', 'Potato', 'Tomato'];
 
     for (let product of products) {
-        test(`Search [${product}] offer`, async () => {
+        test(`Search [${product}] offer`, async ({ offersPage }) => {
             await offersPage.verifyItemsAmount();
             await offersPage.search(product);
             await offersPage.verifyItemsAmount('1');
@@ -25,7 +28,7 @@ test.describe('Offers', async () => {
     }
 
     for (let columnIndex of getKeys(Columns).map(v => +v)) {
-        test(`Sort items by ${Columns[columnIndex]} ASC`, async () => {
+        test(`Sort items by ${Columns[columnIndex]} ASC`, async ({ offersPage }) => {
             let itemNames = await offersPage.getItemNames();
 
             await offersPage.sortBy(columnIndex);
@@ -35,7 +38,7 @@ test.describe('Offers', async () => {
     }
 
     for (let columnIndex of getKeys(Columns).map(v => +v)) {
-        test(`Sort items by ${Columns[columnIndex]} DESC`, async () => {
+        test(`Sort items by ${Columns[columnIndex]} DESC`, async ({ offersPage }) => {
             //items are sorted by name DESC by default
             if (columnIndex == Columns.name)
                 await offersPage.sortBy(Columns.price, SortingOrder.Asc);
@@ -48,7 +51,7 @@ test.describe('Offers', async () => {
         });
     }
     
-    test("Change items size", async () => {
+    test("Change items size", async ({ offersPage }) => {
         const amounts = await offersPage.getItemsPerPage();
 
         for (let amount of amounts) {

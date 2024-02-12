@@ -2,7 +2,6 @@ import {expect, Locator, Page} from "@playwright/test";
 
 export class LoginPage {
     
-    protected readonly page: Page;
     protected readonly errorMessage : Locator;
     protected readonly usernameField : Locator;
     protected readonly passwordField : Locator;
@@ -13,8 +12,7 @@ export class LoginPage {
     protected readonly signInButton : Locator;
     protected readonly userCredentials : Locator;
 
-    constructor(page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
         this.errorMessage = page.locator('.alert');
         this.usernameField = page.locator('#username');
         this.passwordField = page.locator('#password');

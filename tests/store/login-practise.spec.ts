@@ -1,16 +1,15 @@
-import {test} from '@playwright/test';
-import {LoginPage} from "./pages/loginPractise/loginPage";
-import {StorePage} from "./pages/loginPractise/storePage";
+import {test as base} from '@playwright/test';
+import {LoginPageFixtures, loginPageFixtures} from "./fixtures/loginPractise/loginPage.fixtures";
+import {StorePageFixtures, storePageFixtures} from "./fixtures/loginPractise/storePage.fixtures";
+
+const test = base.extend<LoginPageFixtures & StorePageFixtures>({
+    ...loginPageFixtures,
+    ...storePageFixtures
+});
 
 test.describe('Login tests', async () => {
 
-    let loginPage: LoginPage;
-    let storePage: StorePage;
-
     test.beforeEach(async ({page}) => {
-        loginPage = new LoginPage(page);
-        storePage = new StorePage(page);
-
         await page.goto('/loginpagePractise/');
     });
 
@@ -30,7 +29,7 @@ test.describe('Login tests', async () => {
     ];
 
     for (let user of validUsers) {
-        test.only(`Positive login for [${JSON.stringify(user)}]`, async () => {
+        test.only(`Positive login for [${JSON.stringify(user)}]`, async ({ loginPage, storePage }) => {
             await loginPage.login(user);
             await storePage.verifyOpened();
         });
@@ -44,7 +43,8 @@ test.describe('Login tests', async () => {
     ];
 
     for (let user  of invalidUsers) {
-        test(`Negative login with [${JSON.stringify({username:user.username, password:user.password})}] credentials`, async () => {
+        test(`Negative login with [${JSON.stringify({username:user.username, password:user.password})}] credentials`, 
+            async ({ loginPage }) => {
             await loginPage.login(user);
             await loginPage.verifyErrorMessage(user.errorMessage);
         });

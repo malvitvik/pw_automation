@@ -1,26 +1,38 @@
-import {test, expect} from '@playwright/test';
-import {Header} from "./pages/header/header";
-import {ProductGrid} from "./pages/productGrid";
-import {ShoppingCart} from "./pages/checkout/shoppingCart";
-import {CheckoutPage} from "./pages/checkout/checkoutPage";
+import {test as base} from '@playwright/test';
+ 
 import {Product} from "./models/product";
+import {
+    HeaderFixtures,
+    headerFixtures
+} from "./fixtures/header.fixtures";
+import {
+    ProductGridFixtures,
+    productGridFixtures
+} from "./fixtures/productGrid.fixtures";
+import {
+    ShoppingCartFixtures,
+    shoppingCartFixtures
+} from "./fixtures/shoppingCart.fixtures";
+import {
+    CheckoutFixtures,
+    checkoutFixtures
+} from "./fixtures/checkout.fixtures";
 
+const test = base.extend<HeaderFixtures & ProductGridFixtures & 
+    ShoppingCartFixtures & CheckoutFixtures>({
+    ...headerFixtures,
+    ...productGridFixtures,
+    ...shoppingCartFixtures, 
+    ...checkoutFixtures
+    
+});
 test.describe('Checkout flow', async () => {
-    let header : Header;
-    let productGrid: ProductGrid;
-    let shoppingCart: ShoppingCart;
-    let checkoutPage: CheckoutPage;
 
     test.beforeEach(async ({page}) => {
-        header = new Header(page);
-        productGrid = new ProductGrid(page);
-        shoppingCart = new ShoppingCart(page);
-        checkoutPage = new CheckoutPage(page);
-
         await page.goto('/seleniumPractise/#/');
     });
     
-    test('E2E test: Place order', async () => {
+    test('E2E test: Place order', async ({header, productGrid, shoppingCart,checkoutPage}) => {
         const products = [new Product('Brocolli'), new Product('Beetroot'), new Product('Pumpkin', 2)];
         const coupon = 'rahulshettyacademy';
         const country = 'United Kingdom';
@@ -39,7 +51,7 @@ test.describe('Checkout flow', async () => {
         await checkoutPage.verifyPlacedOrder();
     });
     
-    test('Empty coupon code', async () => {
+    test('Empty coupon code', async ({header, productGrid, shoppingCart}) => {
         await productGrid.addProductToCart('Beetroot');
 
         await header.openShoppingCart();
@@ -47,7 +59,7 @@ test.describe('Checkout flow', async () => {
         await shoppingCart.verifyCouponError();
     });
 
-    test('Invalid coupon code', async () => {
+    test('Invalid coupon code', async ({header, productGrid, shoppingCart}) => {
         let coupon = 'sadf';
 
         await productGrid.addProductToCart('Beetroot');
@@ -57,7 +69,7 @@ test.describe('Checkout flow', async () => {
         await shoppingCart.verifyCouponError(coupon);
     });
 
-    test('Order error', async () => {
+    test('Order error', async ({header, productGrid, shoppingCart, checkoutPage}) => {
         const country = 'United Kingdom';
 
         await productGrid.addProductToCart('Beetroot');

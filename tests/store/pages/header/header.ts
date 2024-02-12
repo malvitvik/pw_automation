@@ -3,7 +3,6 @@ import {MiniCart} from "./miniCart";
 import {Product} from "../../models/product";
 
 export class Header {
-    protected readonly page: Page;
     //search
     protected readonly searchFiled: Locator;
     protected readonly searchButton: Locator;
@@ -12,8 +11,7 @@ export class Header {
     protected readonly cartInfo: Locator;
     protected readonly miniCart: MiniCart;
     
-    constructor(page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
         this.searchFiled = page.locator('.search-keyword');
         this.searchButton = page.locator('.search-button');
         this.cartIcon = page.locator('.cart-icon');

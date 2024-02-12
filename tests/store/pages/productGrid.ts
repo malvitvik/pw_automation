@@ -2,12 +2,10 @@ import {Locator, Page, expect} from "@playwright/test";
 import {Product} from "../models/product";
 
 export  class ProductGrid {
-    protected readonly page: Page;
     protected readonly productTiles: Locator;
     protected readonly noResultMessage: Locator;
     
-    constructor(page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
         this.productTiles = page.locator('.products .product');
         this.noResultMessage = page.locator('.no-results');
     }
