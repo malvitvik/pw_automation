@@ -10,70 +10,58 @@ import {OrderDetails} from "./pages/client/orderDetails";
 import {CreditCard} from "./models/creditCard";
 import {Product} from "./models/product";
 import {BrowserContext} from "playwright-core";
+import creditCardData from "../../test-data/creditCard.json";
+import checkoutData from "../../test-data/checkout.json";
+import loginPayload from "../../test-data/payLoads/loginPayload.json";
+import {PoManager} from "./pages/poManager";
 
 test.describe('client storage', async () => {
 
     let webContext: BrowserContext;
     
-    let header: Header;
-    let plp: ProductListingPage;
-    let cart: ShoppingCart;
-    let checkout: CheckoutPage;
-    let orderSummary: OrderSummary;
-    let orderHistory: OrderHistory;
-    let orderDetails: OrderDetails;
+    let poManager : PoManager;
 
-    const loginPayload = {userEmail: "user_549@email.com", userPassword: "Qwerty123"};
-    const creditCard = new CreditCard('Test', '4111 1111 1111 1111', '05/2025', '000');
-    const country = 'India';
-    const coupon = 'rahulshettyacademy';
+    const creditCard = new CreditCard(creditCardData);
     
     test.beforeAll(async ({browser}) => {
         const context = await browser.newContext();
-        const page = await context.newPage();
+        poManager = new PoManager(await context.newPage());
         
-        await page.goto('/client/');
-        await new LoginPage(page).login(loginPayload);
-        await page.waitForLoadState("networkidle");
+        await poManager.loginPage.goto();
+        await poManager.loginPage.login(loginPayload);
+
+        await poManager.page.waitForLoadState("networkidle");
         await context.storageState({ path: 'state.json' });
-        await page.close();
+        await poManager.page.close();
         
         webContext = await browser.newContext({storageState: 'state.json'});
     });
 
     test.beforeEach(async () => {
-        const page = await webContext.newPage();
-        header = new Header(page);
-        plp = new ProductListingPage(page);
-        cart = new ShoppingCart(page);
-        checkout = new CheckoutPage(page);
-        orderSummary = new OrderSummary(page);
-        orderHistory = new OrderHistory(page);
-        orderDetails = new OrderDetails(page);
-
-        await page.goto('/client/');
+        poManager = new PoManager(await webContext.newPage());
+        await poManager.loginPage.goto();
     });
 
     test('Storage - place order', async() => {
 
-        const products = [new Product(await plp.addProductToCart(1))];
+        const products = [new Product(await poManager.plp.addProductToCart(1))];
 
-        await header.openShoppingCart();
-        await cart.verifyProducts(products);
-        await cart.proceedToCheckout();
+        await poManager.header.openShoppingCart();
+        await poManager.cart.verifyProducts(products);
+        await poManager.cart.proceedToCheckout();
 
-        await checkout.verifyProducts(products);
-        await checkout.verifyEmail(loginPayload.userEmail);
-        await checkout.shippingAddress(country);
-        await checkout.selectCreditCardPayment();
-        await checkout.creditCard().fill(creditCard);
-        await checkout.applyCoupon(coupon);
-        await checkout.verifyCouponApplied(coupon);
-        await checkout.placeOrder();
+        await poManager.checkout.verifyProducts(products);
+        await poManager.checkout.verifyEmail(loginPayload.userEmail);
+        await poManager.checkout.shippingAddress(checkoutData.country);
+        await poManager.checkout.selectCreditCardPayment();
+        await poManager.checkout.creditCard().fill(creditCard);
+        await poManager.checkout.applyCoupon(checkoutData.coupon);
+        await poManager.checkout.verifyCouponApplied(checkoutData.coupon);
+        await poManager.checkout.placeOrder();
 
-        const orderNumber = await orderSummary.getOrderNumber();
-        await orderSummary.openOrderHistory();
-        await orderHistory.openOrder(orderNumber);
-        await orderDetails.verifyOrder(orderNumber);
+        const orderNumber = await poManager.orderSummary.getOrderNumber();
+        await poManager.orderSummary.openOrderHistory();
+        await poManager.orderHistory.openOrder(orderNumber);
+        await poManager.orderDetails.verifyOrder(orderNumber);
     });
 });

@@ -6,7 +6,7 @@ export class CreditCard {
     expiryYear: string;
     cvv: string;
     
-    constructor(owner:string, cardNumber:string, expiryDate:string, cvv: string) {
+    constructor({ owner, cardNumber, expiryDate, cvv }) {
         this.owner = owner;
         this.cardNumber = cardNumber;
         this.cvv = cvv;

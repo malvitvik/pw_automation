@@ -1,27 +1,25 @@
 import {request, test as base} from '@playwright/test';
 import {Product} from "./models/product";
 import {CreditCard} from "./models/creditCard";
-import {ApiUtils} from "./utils/api-utils";
+import {ApiUtils} from "../../utils/api-utils";
 import {headerFixtures, HeaderFixtures} from "./fixtures/client/header.fixtures";
-import {productListingPageFixtures, ProductListingPageFixtures} from "./fixtures/client/productListingPage.fixtures";
-import {shoppingCartPageFixtures, ShoppingCartPageFixtures} from "./fixtures/client/shoppingCart.fixtures";
+import {productFixtures, ProductFixtures} from "./fixtures/client/productFixtures";
 import {checkoutFixtures, CheckoutFixtures} from "./fixtures/client/checkout.fixtures";
-import {orderSummaryFixtures, OrderSummaryFixtures} from "./fixtures/client/orderSummary.fixtures";
-import {orderHistoryFixtures, OrderHistoryFixtures} from "./fixtures/client/orderHistory.fixtures";
-import {orderDetailsFixtures, OrderDetailsFixtures} from "./fixtures/client/orderDetails.fixtures";
-import {loginPageFixtures, LoginPageFixtures} from "./fixtures/client/loginPage.fixtures";
+import {orderFixtures, OrderFixtures} from "./fixtures/client/orderFixtures";
+import {accountFixtures, AccountFixtures} from "./fixtures/client/account.fixture";
+import creditCardData from "../../test-data/creditCard.json";
+import checkoutData from "../../test-data/checkout.json";
+import loginPayload from "../../test-data/payLoads/loginPayload.json";
+import orderPayload from "../../test-data/payLoads/orderPayload.json";
+import fakePayLoadOrders from "../../test-data/payLoads/fakePayLoadOrders.json";
 
-const test = base.extend<HeaderFixtures & LoginPageFixtures &
-    ProductListingPageFixtures & ShoppingCartPageFixtures & CheckoutFixtures &
-    OrderSummaryFixtures & OrderHistoryFixtures & OrderDetailsFixtures>({
+const test = base.extend<HeaderFixtures & 
+    AccountFixtures & ProductFixtures & CheckoutFixtures & OrderFixtures>({
     ...headerFixtures,
-    ...loginPageFixtures,
-    ...productListingPageFixtures,
-    ...shoppingCartPageFixtures,
+    ...accountFixtures,
+    ...productFixtures,
     ...checkoutFixtures,
-    ...orderSummaryFixtures,
-    ...orderHistoryFixtures,
-    ...orderDetailsFixtures
+    ...orderFixtures
 });
 
 test.describe('Client API tests', async () => {
@@ -29,14 +27,7 @@ test.describe('Client API tests', async () => {
     let apiUtils : ApiUtils;
     
     let apiResponse = {token:undefined, orderNumber:undefined};
-
-    const creditCard = new CreditCard('Test', '4111 1111 1111 1111', '05/2025', '000');
-    const country = 'India';
-    const coupon = 'rahulshettyacademy';
-    
-    const loginPayload = {userEmail: "user_549@email.com", userPassword: "Qwerty123"};
-    const orderPayload = {orders: [{country: 'Cuba', productOrderedId:  '6581ca399fd99c85e8ee7f45'}]};
-    const fakePayLoadOrders = {data:[], message:"No Orders"};
+    const creditCard = new CreditCard(creditCardData);
 
     
     test.beforeAll(async () => {
@@ -63,11 +54,11 @@ test.describe('Client API tests', async () => {
 
         await checkout.verifyProducts(products);
         await checkout.verifyEmail(loginPayload.userEmail);
-        await checkout.shippingAddress(country);
+        await checkout.shippingAddress(checkoutData.country);
         await checkout.selectCreditCardPayment();
         await checkout.creditCard().fill(creditCard);
-        await checkout.applyCoupon(coupon);
-        await checkout.verifyCouponApplied(coupon);
+        await checkout.applyCoupon(checkoutData.coupon);
+        await checkout.verifyCouponApplied(checkoutData.coupon);
         await checkout.placeOrder();
 
         const orderNumber = await orderSummary.getOrderNumber();
