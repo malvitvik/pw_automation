@@ -3,6 +3,8 @@ import {test, expect} from '@playwright/test';
 test.describe('Locators examples', async () => {
     
     test.beforeEach(async ({page}) => {
+        await page.route('**/**.png', route => route.abort());
+        await page.route('**/js/adsbygoogle.js', route => route.abort());
         await page.goto('AutomationPractice/');
     });
     
