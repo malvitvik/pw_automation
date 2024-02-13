@@ -1,5 +1,5 @@
 import {test as base} from '@playwright/test';
-import {randomInt} from "./utils/helper";
+import {randomInt} from "../../utils/helper";
 import {Product} from "./models/product";
 import {CreditCard} from "./models/creditCard";
 import {HeaderFixtures, headerFixtures} from "./fixtures/client/header.fixtures";

@@ -1,6 +1,6 @@
 import {test as base} from '@playwright/test';
 import {Columns} from "./models/columns";
-import {getKeys} from "./utils/helper";
+import {getKeys} from "../../utils/helper";
 import {SortingOrder} from "./models/sortingOrder";
 import {
     OffersPageFixtures,

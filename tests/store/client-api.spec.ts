@@ -1,7 +1,7 @@
 import {request, test as base} from '@playwright/test';
 import {Product} from "./models/product";
 import {CreditCard} from "./models/creditCard";
-import {ApiUtils} from "./utils/api-utils";
+import {ApiUtils} from "../../utils/api-utils";
 import {headerFixtures, HeaderFixtures} from "./fixtures/client/header.fixtures";
 import {productListingPageFixtures, ProductListingPageFixtures} from "./fixtures/client/productListingPage.fixtures";
 import {shoppingCartPageFixtures, ShoppingCartPageFixtures} from "./fixtures/client/shoppingCart.fixtures";
