@@ -5,11 +5,13 @@ export class OrderDetails {
     protected readonly page: Page;
     protected readonly orderNumber: Locator;
     protected readonly productCards: Locator;
+    protected readonly notAuthorizedMessage: Locator;
     
     constructor(page: Page) {
         this.page = page;
         this.orderNumber = page.locator('.col-text');
         this.productCards = page.locator('.artwork-card');
+        this.notAuthorizedMessage = page.locator('.row p');
     }
     
     async verifyOrder(orderNumber: string, products?: Array<Product>) {
@@ -17,7 +19,7 @@ export class OrderDetails {
         
         if (products === undefined) return;
         
-        expect.soft(this.productCards.all()).toHaveLength(products.length);
+        await expect.soft(this.productCards).toHaveCount(products.length);
         
         for (let product of products) {
             let card = this.productCards.filter({ hasText: product.name });
@@ -26,5 +28,9 @@ export class OrderDetails {
             await expect.soft(card.locator(".title")).toHaveText(orderNumber);
         }
 
+    }
+    async verifyNotAuthorized() {
+        await expect.soft(this.notAuthorizedMessage).toHaveClass('blink_me');
+        await expect.soft(this.notAuthorizedMessage).toHaveText('You are not authorize to view this order');
     }
 }

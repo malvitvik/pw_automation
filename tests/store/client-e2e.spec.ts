@@ -31,10 +31,6 @@ test.describe('Client E2E tests', async () => {
     const creditCard = new CreditCard('Test', '4111 1111 1111 1111', '05/2025', '000');
     const country = 'India';
     const coupon = 'rahulshettyacademy';
-    
-    test.beforeEach(async ({page}) => {
-        await page.goto('/client/');
-    });
 
     test('E2E test - register user and place order', async({ header, loginPage, registrationPage, 
                                                                plp, cart, checkout,
@@ -44,6 +40,7 @@ test.describe('Client E2E tests', async () => {
         const user = {firstName: `firstName${no}`, lastName: `lastName${no}`, gender: 'Male',
             email: `user_${no}@email.com`, phoneNumber:'3333333333', password:'Qwerty123', occupation: 'Doctor'};
         
+        await loginPage.goto();
         await loginPage.openRegistration();
         await registrationPage.registerUser(user);
         await registrationPage.verifyRegistered();
