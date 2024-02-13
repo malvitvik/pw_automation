@@ -35,25 +35,55 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    headless: false,
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        headless: false,
+        browserName: "chromium",
+        screenshot: "on", //"on" / "off"
+        trace: 'on',
+        ignoreHTTPSErrors: true,
+        permissions: ['geolocation'],
+        //viewport: {width: 1024, height: 720},
+        ...devices['Desktop Chrome'],
+      },
+    },
+
+    {
+      name: 'chromium2',
+      use: {
+        headless: false,
+        browserName: "chromium",
+        screenshot: "on", //"on" / "off"
+        trace: 'on',
+        ignoreHTTPSErrors: true,
+        permissions: ['geolocation'],
+        storageState: 'state.json',
+        //viewport: {width: 1024, height: 720},
+        ...devices['Desktop Chrome'],
+      },
     },
 
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },
     // },
-    //
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
+
+    {
+      name: 'webkit',
+      use: {
+        headless: true,
+        screenshot: "off",
+        trace: 'off',
+        video: "on-first-retry",
+        
+        ...devices['iPhone 14 Plus']
+      },
+    },
 
     /* Test against mobile viewports. */
     // {
