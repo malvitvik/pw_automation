@@ -38,7 +38,7 @@ export class OffersPage {
         if (number == 5) {
             expect(await this.menuItems.count()).toBeLessThanOrEqual(+amount);
         } else {
-            expect(await this.menuItems.all()).toHaveLength(+amount);
+            await expect(this.menuItems).toHaveCount(+amount);
         }
     }
     

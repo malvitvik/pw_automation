@@ -36,7 +36,7 @@ export class CheckoutPage {
     async verifyProducts(products : Array<Product>) {
         await this.cartItems.first().waitFor({ state: 'visible' });
 
-        expect(await this.cartItems.all()).toHaveLength(products.length);
+        await expect(this.cartItems).toHaveCount(products.length);
 
         for (let product of products) {
             let tile = this.cartItems.filter({ hasText: product.name });
