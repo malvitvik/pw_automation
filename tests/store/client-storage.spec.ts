@@ -1,12 +1,4 @@
 import {test} from '@playwright/test';
-import {Header} from "./pages/client/header";
-import {LoginPage} from "./pages/client/loginPage";
-import {ProductListingPage} from "./pages/client/productListingPage";
-import {ShoppingCart} from "./pages/client/shoppingCart";
-import {CheckoutPage} from "./pages/client/checkoutPage";
-import {OrderSummary} from "./pages/client/orderSummary";
-import {OrderHistory} from "./pages/client/orderHistory";
-import {OrderDetails} from "./pages/client/orderDetails";
 import {CreditCard} from "./models/creditCard";
 import {Product} from "./models/product";
 import {BrowserContext} from "playwright-core";
@@ -17,28 +9,30 @@ import {PoManager} from "./pages/poManager";
 
 test.describe('client storage', async () => {
 
-    let webContext: BrowserContext;
+    // let webContext: BrowserContext;
     
     let poManager : PoManager;
 
     const creditCard = new CreditCard(creditCardData);
     
-    test.beforeAll(async ({browser}) => {
-        const context = await browser.newContext();
-        poManager = new PoManager(await context.newPage());
-        
-        await poManager.loginPage.goto();
-        await poManager.loginPage.login(loginPayload);
+    // test.beforeAll(async ({browser}) => {
+    //     const context = await browser.newContext();
+    //     poManager = new PoManager(await context.newPage());
+    //
+    //     await poManager.loginPage.goto();
+    //     await poManager.loginPage.login(loginPayload);
+    //
+    //     await poManager.page.waitForLoadState("networkidle");
+    //     await context.storageState({ path: 'state.json' });
+    //     await poManager.page.close();
+    //
+    //     webContext = await browser.newContext({storageState: 'state.json'});
+    // });
 
-        await poManager.page.waitForLoadState("networkidle");
-        await context.storageState({ path: 'state.json' });
-        await poManager.page.close();
-        
-        webContext = await browser.newContext({storageState: 'state.json'});
-    });
-
-    test.beforeEach(async () => {
-        poManager = new PoManager(await webContext.newPage());
+    //use --project=chromium2
+    test.beforeEach(async ({page}) => {
+        // poManager = new PoManager(await webContext.newPage());
+        poManager = new PoManager(page);
         await poManager.loginPage.goto();
     });
 
