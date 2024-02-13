@@ -1,11 +1,9 @@
 import {expect, Locator, Page} from "@playwright/test";
 
 export class StorePage {
-    protected readonly page: Page;
     protected readonly productItems : Locator;
     
-    constructor(page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
         this.productItems = page.locator('.card');
     }
     

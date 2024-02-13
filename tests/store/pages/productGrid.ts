@@ -2,12 +2,10 @@ import {Locator, Page, expect} from "@playwright/test";
 import {Product} from "../models/product";
 
 export  class ProductGrid {
-    protected readonly page: Page;
     protected readonly productTiles: Locator;
     protected readonly noResultMessage: Locator;
     
-    constructor(page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
         this.productTiles = page.locator('.products .product');
         this.noResultMessage = page.locator('.no-results');
     }
@@ -24,7 +22,7 @@ export  class ProductGrid {
     async verifyNoSearchResult() {
         await expect(this.noResultMessage).toBeVisible();
         await expect(this.noResultMessage).toContainText('Sorry, no products matched your search!');
-        expect(await this.productTiles.all()).toHaveLength(0);
+        await expect(this.productTiles).toHaveCount(0);
     }
     
     async addProductToCart(items: Product[]|string) {

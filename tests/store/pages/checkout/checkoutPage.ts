@@ -1,15 +1,13 @@
 import {expect, Locator, Page} from "@playwright/test";
 
 export class CheckoutPage {
-    protected readonly page: Page;
     protected readonly countryDropDown: Locator;
     protected readonly termsAndConditionsCheckbox: Locator;
     protected readonly errorMessage: Locator;
     protected readonly placeOrderButton: Locator;
     protected readonly orderConfirmationMessage: Locator;
     
-    constructor(page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
         this.countryDropDown = page.getByRole('combobox');
         this.termsAndConditionsCheckbox = page.getByRole('checkbox');
         this.errorMessage = page.locator('.errorAlert');

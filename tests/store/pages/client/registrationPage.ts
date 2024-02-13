@@ -50,6 +50,7 @@ export class RegistrationPage {
             for (let radiobutton of await this.rgpGender.all()) {
                 if (user.gender === await radiobutton.getAttribute('value')) {
                     await radiobutton.click();
+                    break;
                 }
             }
         }

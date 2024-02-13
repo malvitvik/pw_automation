@@ -3,21 +3,19 @@ import {MiniCart} from "./miniCart";
 import {Product} from "../../models/product";
 
 export class Header {
-    protected readonly page: Page;
     //search
     protected readonly searchFiled: Locator;
     protected readonly searchButton: Locator;
     //shopping cart
     protected readonly cartIcon: Locator;
-    protected readonly carrInfo: Locator;
+    protected readonly cartInfo: Locator;
     protected readonly miniCart: MiniCart;
     
-    constructor(page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
         this.searchFiled = page.locator('.search-keyword');
         this.searchButton = page.locator('.search-button');
         this.cartIcon = page.locator('.cart-icon');
-        this.carrInfo = page.locator('.cart-info td:last-child');
+        this.cartInfo = page.locator('.cart-info td:last-child');
         this.miniCart = new MiniCart(page);
     }
     
@@ -32,12 +30,12 @@ export class Header {
     }
     
     async verifyCartIsEmpty() {
-        await expect.soft(this.carrInfo.first()).toHaveText('0');
-        await expect.soft(this.carrInfo.last()).toHaveText('0');
+        await expect.soft(this.cartInfo.first()).toHaveText('0');
+        await expect.soft(this.cartInfo.last()).toHaveText('0');
     }
     
     async verifyCartHasProducts(items: Array<Product>) {
-        await expect.soft(this.carrInfo.first()).toHaveText(''+ items.length);
-        await expect.soft(this.carrInfo.last()).not.toHaveText('0');
+        await expect.soft(this.cartInfo.first()).toHaveText(''+ items.length);
+        await expect.soft(this.cartInfo.last()).not.toHaveText('0');
     }
 }

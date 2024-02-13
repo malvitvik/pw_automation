@@ -2,7 +2,6 @@ import {expect, Locator, Page} from "@playwright/test";
 import {Product} from "../../models/product";
 
 export class ShoppingCart {
-    protected readonly page: Page;
     protected readonly cartItems: Locator;
     protected readonly promoField: Locator;
     protected readonly promoMessage: Locator;
@@ -10,8 +9,7 @@ export class ShoppingCart {
     protected readonly orderSummary: Locator;
     protected readonly proceedToCheckoutButton: Locator;
     
-    constructor(page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
         this.cartItems = page.locator('.products tbody tr');
         this.promoField = page.locator('.promoCode');
         this.promoMessage = page.locator('.promoInfo');
@@ -24,7 +22,7 @@ export class ShoppingCart {
         // await this.proceedToCheckoutButton.waitFor({ state: 'visible' });
         await this.cartItems.first().waitFor({ state: 'visible' });
 
-        expect(await this.cartItems.all()).toHaveLength(products.length);
+        await expect(this.cartItems).toHaveCount(products.length);
         
         for (let product of products) {
             let tile = this.cartItems.filter({ hasText: product.name });

@@ -3,7 +3,6 @@ import {Columns} from "../../models/columns";
 import {SortingOrder} from "../../models/sortingOrder";
 
 export class OffersPage {
-    protected readonly page: Page;
     protected readonly searchField: Locator;
     protected readonly pageMenu: Locator;
     protected readonly pagination: Locator;
@@ -11,8 +10,7 @@ export class OffersPage {
     protected readonly menuItems: Locator;
     protected readonly itemNames: Locator;
     
-    constructor(page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
         this.searchField = page.locator('#search-field');
         this.pageMenu = page.locator('#page-menu');
         this.pagination = page.locator('.pagination a[role="button"]');
@@ -40,7 +38,7 @@ export class OffersPage {
         if (number == 5) {
             expect(await this.menuItems.count()).toBeLessThanOrEqual(+amount);
         } else {
-            expect(await this.menuItems.all()).toHaveLength(+amount);
+            await expect(this.menuItems).toHaveCount(+amount);
         }
     }
     

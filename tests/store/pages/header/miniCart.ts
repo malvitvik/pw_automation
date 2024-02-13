@@ -1,12 +1,10 @@
 import {expect, Locator, Page} from "@playwright/test";
 
 export class MiniCart {
-    protected readonly page: Page;
     protected readonly cartButton: Locator;
     protected readonly emptyCartMessage: Locator;
 
-    constructor(page: Page) {
-        this.page = page;
+    constructor(protected page: Page) {
         this.cartButton = page.locator('.cart-preview button');
         this.emptyCartMessage = page.locator('.cart-preview .empty-cart');
     }
