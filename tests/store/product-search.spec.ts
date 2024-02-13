@@ -1,11 +1,11 @@
 import {test as base} from "playwright/types/test";
 import {headerFixtures, HeaderFixtures} from "./fixtures/header.fixtures";
-import {productGridFixtures, ProductGridFixtures} from "./fixtures/productGrid.fixtures";
+import {productFixtures, ProductFixtures} from "./fixtures/productFixtures";
 
 
-const test = base.extend<HeaderFixtures & ProductGridFixtures>({
+const test = base.extend<HeaderFixtures & ProductFixtures>({
     ...headerFixtures,
-    ...productGridFixtures
+    ...productFixtures
 
 });
 

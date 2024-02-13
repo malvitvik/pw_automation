@@ -1,10 +1,10 @@
 import {ProductListingPage} from "../../pages/client/productListingPage";
 
-export interface ProductListingPageFixtures {
+export interface ProductFixtures {
     plp: ProductListingPage;
 }
 
-export const productListingPageFixtures = {
+export const productFixtures = {
     plp: async ({page}: any, use: (arg0: ProductListingPage) => any) => {
         const plp = new ProductListingPage(page);
         await use(plp);

@@ -1,0 +1,6 @@
+[
+	{"username":"",        "password":"",        "errorMessage":"Empty username/password."},
+	{"username":"",        "password":"invalid", "errorMessage":"Empty username/password."},
+	{"username":"invalid", "password":"",        "errorMessage":"Empty username/password."},
+	{"username":"invalid", "password":"invalid", "errorMessage":"Incorrect username/password."}
+]

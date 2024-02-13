@@ -8,7 +8,7 @@ export class ApiUtils {
         this.apiContext = apiContext;
     }
     
-    async getToken(loginPayload: {}) {
+    async getToken(loginPayload: {userEmail:string, userPassword:string}) {
         const loginResponse = await this.apiContext.post('/api/ecom/auth/login', { data: loginPayload });
 
         expect(loginResponse.ok()).toBeTruthy();

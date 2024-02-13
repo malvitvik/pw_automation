@@ -6,23 +6,17 @@ import {
     headerFixtures
 } from "./fixtures/header.fixtures";
 import {
-    ProductGridFixtures,
-    productGridFixtures
-} from "./fixtures/productGrid.fixtures";
-import {
-    ShoppingCartFixtures,
-    shoppingCartFixtures
-} from "./fixtures/shoppingCart.fixtures";
+    ProductFixtures,
+    productFixtures
+} from "./fixtures/productFixtures";
 import {
     CheckoutFixtures,
     checkoutFixtures
 } from "./fixtures/checkout.fixtures";
 
-const test = base.extend<HeaderFixtures & ProductGridFixtures & 
-    ShoppingCartFixtures & CheckoutFixtures>({
+const test = base.extend<HeaderFixtures & ProductFixtures & CheckoutFixtures>({
     ...headerFixtures,
-    ...productGridFixtures,
-    ...shoppingCartFixtures, 
+    ...productFixtures,
     ...checkoutFixtures
     
 });
@@ -32,7 +26,7 @@ test.describe('Checkout flow', async () => {
         await page.goto('/seleniumPractise/#/');
     });
     
-    test('E2E test: Place order', async ({header, productGrid, shoppingCart,checkoutPage}) => {
+    test('E2E test: Place order', async ({header, productGrid, cart,checkoutPage}) => {
         const products = [new Product('Brocolli'), new Product('Beetroot'), new Product('Pumpkin', 2)];
         const coupon = 'rahulshettyacademy';
         const country = 'United Kingdom';
@@ -42,40 +36,40 @@ test.describe('Checkout flow', async () => {
         await header.verifyCartHasProducts(products);
         
         await header.openShoppingCart();
-        await shoppingCart.verifyProducts(products);
-        await shoppingCart.verifyOrderSummary();
-        await shoppingCart.applyCoupon(coupon);
-        await shoppingCart.verifyCouponApplied(coupon);
-        await shoppingCart.proceedToCheckout();
+        await cart.verifyProducts(products);
+        await cart.verifyOrderSummary();
+        await cart.applyCoupon(coupon);
+        await cart.verifyCouponApplied(coupon);
+        await cart.proceedToCheckout();
         await checkoutPage.placeOrder(country);
         await checkoutPage.verifyPlacedOrder();
     });
     
-    test('Empty coupon code', async ({header, productGrid, shoppingCart}) => {
+    test('Empty coupon code', async ({header, productGrid, cart}) => {
         await productGrid.addProductToCart('Beetroot');
 
         await header.openShoppingCart();
-        await shoppingCart.applyCoupon('');
-        await shoppingCart.verifyCouponError();
+        await cart.applyCoupon('');
+        await cart.verifyCouponError();
     });
 
-    test('Invalid coupon code', async ({header, productGrid, shoppingCart}) => {
+    test('Invalid coupon code', async ({header, productGrid, cart}) => {
         let coupon = 'sadf';
 
         await productGrid.addProductToCart('Beetroot');
 
         await header.openShoppingCart();
-        await shoppingCart.applyCoupon(coupon);
-        await shoppingCart.verifyCouponError(coupon);
+        await cart.applyCoupon(coupon);
+        await cart.verifyCouponError(coupon);
     });
 
-    test('Order error', async ({header, productGrid, shoppingCart, checkoutPage}) => {
+    test('Order error', async ({header, productGrid, cart: cart, checkoutPage}) => {
         const country = 'United Kingdom';
 
         await productGrid.addProductToCart('Beetroot');
 
         await header.openShoppingCart();
-        await shoppingCart.proceedToCheckout();
+        await cart.proceedToCheckout();
         await checkoutPage.placeOrder(country, false);
         await checkoutPage.verifyOrderError();
     });

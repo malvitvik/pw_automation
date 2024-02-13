@@ -24,6 +24,10 @@ export class LoginPage {
         this.userCredentials = page.locator('p.text-center i');
     }
     
+    async goTo() {
+        await this.page.goto('/loginpagePractise/');
+    }
+    
     async login(user?:{username?:string, password?:string, 
                 userType?:string, userRole?:string, terms?:boolean}) {
         user = await this.getUser(user);

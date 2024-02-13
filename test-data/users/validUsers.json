@@ -1,0 +1,14 @@
+[
+	{"userRole": "stud",    "userType":"admin", "terms": true	},
+	{"userRole": "stud",    "userType":"user",  "terms": true},
+	{"userRole": "stud",    "userType":"admin", "terms": false},
+	{"userRole": "stud",    "userType":"user",  "terms": false},
+	{"userRole": "teach",   "userType":"admin", "terms": true},
+	{"userRole": "teach",   "userType":"user",  "terms": true},
+	{"userRole": "teach",   "userType":"admin", "terms": false},
+	{"userRole": "teach",   "userType":"user",  "terms": false},
+	{"userRole": "consult", "userType":"admin", "terms": true},
+	{"userRole": "consult", "userType":"user",  "terms": true},
+	{"userRole": "consult", "userType":"admin", "terms": false},
+	{"userRole": "consult", "userType":"user",  "terms": false}
+]

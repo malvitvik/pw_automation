@@ -1,0 +1,9 @@
+{
+	"password": "Qwerty123",
+	"email": "user_${no}@email.com",
+	"firstName": "firstName${no}", 
+	"lastName": "lastName${no}",
+	"gender": "Male",
+	"phoneNumber": "3333333333",
+	"occupation": "Doctor"
+}

@@ -1,10 +1,10 @@
-import {LoginPage} from "../../pages/client/loginPage";
+import {LoginPage} from "../../pages/loginPractise/loginPage";
 
-export interface LoginPageFixtures {
+export interface AccountFixtures {
     loginPage: LoginPage;
 }
 
-export const loginPageFixtures = {
+export const accountFixtures = {
     loginPage: async ({page}: any, use: (arg0: LoginPage) => any) => {
         const loginPage = new LoginPage(page);
         await use(loginPage);

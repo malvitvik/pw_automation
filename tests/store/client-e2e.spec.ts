@@ -1,45 +1,29 @@
 import {test as base} from '@playwright/test';
-import {randomInt} from "../../utils/helper";
 import {Product} from "./models/product";
-import {CreditCard} from "./models/creditCard";
 import {HeaderFixtures, headerFixtures} from "./fixtures/client/header.fixtures";
-import {registrationPageFixtures, RegistrationPageFixtures} from "./fixtures/client/registrationPage.fixtures";
-import {loginPageFixtures, LoginPageFixtures} from "./fixtures/client/loginPage.fixtures";
-import {productListingPageFixtures, ProductListingPageFixtures} from "./fixtures/client/productListingPage.fixtures";
-import {shoppingCartPageFixtures, ShoppingCartPageFixtures} from "./fixtures/client/shoppingCart.fixtures";
-import {orderSummaryFixtures, OrderSummaryFixtures} from "./fixtures/client/orderSummary.fixtures";
+import {productFixtures, ProductFixtures} from "./fixtures/client/productFixtures";
 import {checkoutFixtures, CheckoutFixtures} from "./fixtures/client/checkout.fixtures";
-import {orderHistoryFixtures, OrderHistoryFixtures} from "./fixtures/client/orderHistory.fixtures";
-import {orderDetailsFixtures, OrderDetailsFixtures} from "./fixtures/client/orderDetails.fixtures";
+import {orderFixtures, OrderFixtures} from "./fixtures/client/orderFixtures";
+import {accountFixtures, AccountFixtures} from "./fixtures/client/account.fixture";
+import {userFixtures, UserFixtures} from "./fixtures/client/userFixtures";
+import checkoutData from "../../test-data/checkout.json";
 
-const test = base.extend<HeaderFixtures & RegistrationPageFixtures & LoginPageFixtures &
-    ProductListingPageFixtures & ShoppingCartPageFixtures & CheckoutFixtures & 
-    OrderSummaryFixtures & OrderHistoryFixtures & OrderDetailsFixtures>({
+const test = base.extend<UserFixtures & HeaderFixtures & 
+    AccountFixtures & ProductFixtures & CheckoutFixtures & OrderFixtures>({
+    ...userFixtures,
     ...headerFixtures,
-    ...registrationPageFixtures,
-    ...loginPageFixtures,
-    ...productListingPageFixtures,
-    ...shoppingCartPageFixtures,
+    ...accountFixtures,
+    ...productFixtures,
     ...checkoutFixtures,
-    ...orderSummaryFixtures,
-    ...orderHistoryFixtures,
-    ...orderDetailsFixtures
+    ...orderFixtures,
 });
 
 test.describe('Client E2E tests', async () => {
 
-    const creditCard = new CreditCard('Test', '4111 1111 1111 1111', '05/2025', '000');
-    const country = 'India';
-    const coupon = 'rahulshettyacademy';
-
-    test('E2E test - register user and place order', async({ header, loginPage, registrationPage, 
+    test('E2E test - register user and place order', async({user, creditCard,
+                                                               header, loginPage, registrationPage, 
                                                                plp, cart, checkout,
                                                                orderSummary, orderHistory, orderDetails}) => {
-        const no = ('000' + randomInt(1_000)).slice(-3);
-        // const no = 549;
-        const user = {firstName: `firstName${no}`, lastName: `lastName${no}`, gender: 'Male',
-            email: `user_${no}@email.com`, phoneNumber:'3333333333', password:'Qwerty123', occupation: 'Doctor'};
-        
         await loginPage.goto();
         await loginPage.openRegistration();
         await registrationPage.registerUser(user);
@@ -57,11 +41,11 @@ test.describe('Client E2E tests', async () => {
         
         await checkout.verifyProducts(products);
         await checkout.verifyEmail(user.email);
-        await checkout.shippingAddress(country);
+        await checkout.shippingAddress(checkoutData.country);
         await checkout.selectCreditCardPayment();
         await checkout.creditCard().fill(creditCard);
-        await checkout.applyCoupon(coupon);
-        await checkout.verifyCouponApplied(coupon);
+        await checkout.applyCoupon(checkoutData.coupon);
+        await checkout.verifyCouponApplied(checkoutData.coupon);
         await checkout.placeOrder();
         
         const orderNumber = await orderSummary.getOrderNumber();
