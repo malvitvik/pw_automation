@@ -22,6 +22,7 @@ const test = base.extend<HeaderFixtures &
     ...orderFixtures
 });
 
+//--grep @api
 test.describe('Client API tests', async () => {
     
     let apiUtils : ApiUtils;
@@ -44,7 +45,7 @@ test.describe('Client API tests', async () => {
         await loginPage.goto();
     });
     
-    test('UI - Place order with registered user', async ({ header, plp, cart, checkout,
+    test('@web Place order with registered user', async ({ header, plp, cart, checkout,
                                                              orderSummary, orderHistory, orderDetails }) => {
         const products = [new Product(await plp.addProductToCart(1))];
 
@@ -67,13 +68,13 @@ test.describe('Client API tests', async () => {
         await orderDetails.verifyOrder(orderNumber);
     });
     
-    test('API - Place order with registered user', async ({ header, orderHistory, orderDetails }) => {
+    test('@api Place order with registered user', async ({ header, orderHistory, orderDetails }) => {
         await header.openOrderHistory();
         await orderHistory.openOrder(apiResponse.orderNumber);
         await orderDetails.verifyOrder(apiResponse.orderNumber);
     });
 
-    test('API - No order', async ({ page, header, orderHistory}) => {
+    test('@api No order', async ({ page, header, orderHistory}) => {
         await page.route('/api/ecom/order/get-orders-for-customer/*', async route => {
             const response = await page.request.fetch(route.request());
             let body = JSON.stringify(fakePayLoadOrders);
@@ -88,7 +89,7 @@ test.describe('Client API tests', async () => {
         await orderHistory.verifyIsEmpty();
     });
     
-    test('API - User is not authorized to see other orders', async ({ page, header , orderHistory, orderDetails}) => {
+    test('@api User is not authorized to see other orders', async ({ page, header , orderHistory, orderDetails}) => {
         await page.route('/api/ecom/order/get-orders-details?id=*', 
                 route => route.continue({url: page.url().replace(/id=.*/g, 'id=1234567890')}));
         

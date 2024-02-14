@@ -20,7 +20,7 @@ const test = base.extend<UserFixtures & HeaderFixtures &
 
 test.describe('Client E2E tests', async () => {
 
-    test('E2E test - register user and place order', async({user, creditCard,
+    test('@web E2E test - register user and place order', async({user, creditCard,
                                                                header, loginPage, registrationPage, 
                                                                plp, cart, checkout,
                                                                orderSummary, orderHistory, orderDetails}) => {
