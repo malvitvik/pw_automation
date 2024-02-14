@@ -4,13 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test"
+    "regression": "npx playwright test",
+    "web": "npx playwright test --grep=@web",
+    "api": "npx playwright test --grep=@api",
+    "state": "npx playwright test tests/store/client-storage.spec.ts --project=chromium2",
+    "show-report": "npx playwright show-report"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.41.1",
-    "@types/node": "^20.11.6"
+    "@types/node": "^20.11.6",
+    "allure-playwright": "^2.12.0"
   }
 }
