@@ -36,7 +36,7 @@ test.describe('client storage', async () => {
         await poManager.loginPage.goto();
     });
 
-    test('Storage - place order', async() => {
+    test('@web Storage - place order', async() => {
 
         const products = [new Product(await poManager.plp.addProductToCart(1))];
 
