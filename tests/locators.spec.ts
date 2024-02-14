@@ -1,5 +1,6 @@
 import {test, expect} from '@playwright/test';
 
+test.describe.configure({mode: "parallel"});
 test.describe('Locators examples', async () => {
     
     test.beforeEach(async ({page}) => {
