@@ -1,18 +1,10 @@
-import { Given, When, Then } from "@cucumber/cucumber";
-import { chromium } from '@playwright/test';
-import { PoManager } from '../../tests/store/pages/poManager'
-import { Product} from "../../tests/store/models/product";
-import { CreditCard} from "../../tests/store/models/creditCard";
+import {Given, Then, When} from "@cucumber/cucumber";
+import {Product} from "../../tests/store/models/product";
+import {CreditCard} from "../../tests/store/models/creditCard";
 import creditCardData from "../../test-data/creditCard.json";
 import checkoutData from "../../test-data/checkout.json";
 
 Given('I am logged in with "{string}" and "{string}"', async function (userEmail:string, password:string) {
-    this.userEmail = userEmail;
-    this.browser = await chromium.launch();
-    const page = await this.browser.newPage();
-    this.poManager = new PoManager(page);
-    
-    await this.poManager.loginPage.goto();
     await this.poManager.loginPage.login({userEmail: userEmail, userPassword:password});
 });
 
