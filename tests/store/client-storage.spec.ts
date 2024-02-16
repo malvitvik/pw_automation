@@ -1,7 +1,6 @@
 import {test} from '@playwright/test';
 import {CreditCard} from "./models/creditCard";
 import {Product} from "./models/product";
-import {BrowserContext} from "playwright-core";
 import creditCardData from "../../test-data/creditCard.json";
 import checkoutData from "../../test-data/checkout.json";
 import loginPayload from "../../test-data/payLoads/loginPayload.json";
