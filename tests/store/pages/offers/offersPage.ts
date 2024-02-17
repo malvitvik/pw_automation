@@ -9,6 +9,9 @@ export class OffersPage {
     protected readonly columnHeaders: Locator;
     protected readonly menuItems: Locator;
     protected readonly itemNames: Locator;
+    protected readonly monthField: Locator;
+    protected readonly dayField: Locator;
+    protected readonly yearField: Locator;
     
     constructor(protected page: Page) {
         this.searchField = page.locator('#search-field');
@@ -17,6 +20,10 @@ export class OffersPage {
         this.columnHeaders = page.getByRole('columnheader');
         this.menuItems = page.locator('tbody tr');
         this.itemNames = this.menuItems.locator('xpath=./td[1]');
+        
+        this.monthField = page.locator('[name="month"]');
+        this.dayField = page.locator('[name="day"]');
+        this.yearField = page.locator('[name="year"]');
     }
     
     async search(phrase:string) {
@@ -68,6 +75,12 @@ export class OffersPage {
         }
     }
     
+    async selectDate(date: {month:string, day:string, year:string}) {
+        await this.monthField.fill(date.month);
+        await this.dayField.fill(date.day);
+        await this.yearField.fill(date.year);
+    }
+    
     async verifyChanged(oldItemNames:string[]) {
         await this.page.waitForLoadState('networkidle');
         await expect(this.itemNames).not.toHaveText(oldItemNames);
@@ -93,5 +106,11 @@ export class OffersPage {
         let sortedItems = Object.assign([], items).sort(comparingFn);
         
         expect(items).toEqual(sortedItems);
+    }
+    
+    async verifyDate(date: {month:string, day:string, year:string}) {
+        await expect(this.monthField).toHaveValue(date.month);
+        await expect(this.dayField).toHaveValue(date.day);
+        await expect(this.yearField).toHaveValue(date.year);
     }
 }
