@@ -18,8 +18,5 @@
     "@playwright/test": "^1.41.1",
     "@types/node": "^20.11.6",
     "allure-playwright": "^2.12.0"
-  },
-  "dependencies": {
-    "npm": "^10.4.0"
   }
 }
