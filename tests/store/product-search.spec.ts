@@ -1,4 +1,4 @@
-import {test as base} from "playwright/types/test";
+import {test as base} from "@playwright/test";
 import {headerFixtures, HeaderFixtures} from "./fixtures/header.fixtures";
 import {productFixtures, ProductFixtures} from "./fixtures/productFixtures";
 
@@ -6,7 +6,6 @@ import {productFixtures, ProductFixtures} from "./fixtures/productFixtures";
 const test = base.extend<HeaderFixtures & ProductFixtures>({
     ...headerFixtures,
     ...productFixtures
-
 });
 
 test.describe('Product search tests', async () => {

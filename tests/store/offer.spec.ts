@@ -2,10 +2,7 @@ import {test as base} from '@playwright/test';
 import {Columns} from "./models/columns";
 import {getKeys} from "../../utils/helper";
 import {SortingOrder} from "./models/sortingOrder";
-import {
-    OffersPageFixtures,
-    offersPageFixtures
-} from "./fixtures/offers/offersPage.fixtures";
+import {OffersPageFixtures, offersPageFixtures} from "./fixtures/offers/offersPage.fixtures";
 
 const test = base.extend<OffersPageFixtures>({
     ...offersPageFixtures
@@ -58,5 +55,12 @@ test.describe('Offers', async () => {
             await offersPage.itemsAmount(amount);
             await offersPage.verifyItemsAmount(amount); 
         }
+    });
+    
+    test("Select date in calendar", async ({ offersPage }) => {
+        const date = { month: "6", day: "15", year: "2030" }; //M D YYYY
+        
+        await offersPage.selectDate(date);
+        await offersPage.verifyDate(date);
     })
 });

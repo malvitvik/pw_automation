@@ -12,7 +12,7 @@ export const checkoutFixtures = {
         await use(cart);
     },
     
-    checkout: async ({page}: any, use: (arg0: CheckoutPage) => any) => {
+    checkoutPage: async ({page}: any, use: (arg0: CheckoutPage) => any) => {
         const checkout = new CheckoutPage(page);
         await use(checkout);
     }
